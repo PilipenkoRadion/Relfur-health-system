@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RELFUR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1abc9c;
+        }
+
+        .burger-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            background: #1abc9c;
+            color: white;
+            padding: 20px;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .sidebar-item {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .sidebar-link:active {
+            background: #f5f5f5;
+        }
+
+        /* OVERLAY */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 150;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* MAIN CONTENT */
+        main {
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 14px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 13px;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 14px;
+            vertical-align: top;
+            line-height: 1.6;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        td:first-child {
+            font-weight: 700;
+            color: #000;
+            min-width: 120px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-right: 6px;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        .tag.python {
+            background: #1abc9c;
+        }
+
+        .tag.javascript {
+            background: #3498db;
+        }
+
+        .tag.html {
+            background: #1abc9c;
+        }
+
+        .tag.css {
+            background: #3498db;
+        }
+
+        .tag.health {
+            background: #e74c3c;
+        }
+
+        .section {
+            margin-top: 50px;
+        }
+
+        .section-title {
+            display: inline-block;
+            background: #1abc9c;
+            color: white;
+            padding: 8px 16px;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            margin: 0;
+            margin-bottom: 20px;
+        }
+
+        .section.javascript .section-title {
+            background: #3498db;
+        }
+
+        .section.css .section-title {
+            background: #3498db;
+        }
+
+        .section.health .section-title {
+            background: #e74c3c;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border-left: 4px solid #1abc9c;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            color: #333;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .divider {
+            border-bottom: 2px solid #e0e0e0;
+            margin: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">⚡ RELFUR</div>
+        <button class="burger-btn" id="burgerBtn">☰</button>
+    </header>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            MENU
+            <button class="close-btn" id="closeBtn">✕</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="sidebar-item">
+                <a href="#python" class="sidebar-link">🐍 Python</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#javascript" class="sidebar-link">📜 JavaScript</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#html" class="sidebar-link">🏗️ HTML5</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#css" class="sidebar-link">🎨 CSS</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#health" class="sidebar-link">❤️ Health Monitor</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#architecture" class="sidebar-link">🔄 Architektur</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#specifications" class="sidebar-link">📊 Spezifikationen</a>
+            </li>
+        </ul>
+    </div>
+
+    
+    <div class="overlay" id="overlay"></div>
+
+
+    <main>
+        <div class="container">
+            <h1>⚡ RELFUR LIFTING SYSTEM</h1>
+            <p class="subtitle">Technologischer Steck & Architektur</p>
+
+            <!-- PYTHON SECTION -->
+            <div class="section" id="python">
+                <h2 class="section-title">🐍 Python</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Technologie</th>
+                            <th>Beschreibung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag python">FastAPI</span></td>
+                            <td>Webserver mit Unterstützung von WebSockets.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag python">MediaPipe</span></td>
+                            <td>Bewegungserkennung (Hand-Skelett-Tracking und Gestenerkennung).</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag python">OpenCV (cv2)</span></td>
+                            <td>Videoaufnahme und Bildverarbeitung.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag python">NumPy</span></td>
+                            <td>Mathematische Berechnungen und Matrix-Operationen.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag python">PyQt5</span></td>
+                            <td>Desktop-Anwendung zur Systemüberwachung (Monitoring).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- JAVASCRIPT SECTION -->
+            <div class="section javascript" id="javascript">
+                <h2 class="section-title">📜 JavaScript</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Technologie</th>
+                            <th>Beschreibung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag javascript">Vanilla JS</span></td>
+                            <td>Steuerung der Benutzeroberfläche (UI-Logik).</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag javascript">WebSocket API</span></td>
+                            <td>Datenübertragung in Echtzeit.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag javascript">Canvas API</span></td>
+                            <td>Rendering von Videostreams und Hand-Skelett-Modellen.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag javascript">Animationen</span></td>
+                            <td>Flüssige UI-Übergänge.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- HTML5 SECTION -->
+            <div class="section" id="html">
+                <h2 class="section-title">🏗️ HTML5</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Technologie</th>
+                            <th>Beschreibung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag html">Struktur</span></td>
+                            <td>Layout und Markup der Benutzeroberfläche.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag html">Semantische Tags</span></td>
+                            <td>Strukturierte und barrierefreie Organisation des Codes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CSS SECTION -->
+            <div class="section css" id="css">
+                <h2 class="section-title">🎨 CSS</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Technologie</th>
+                            <th>Beschreibung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag css">CSS3</span></td>
+                            <td>Styling und visuelles Design.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag css">Flexbox/Grid</span></td>
+                            <td>Modernes responsives Layout.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag css">Verläufe und Schatten</span></td>
+                            <td>Visuelle Effekte für ein modernes Erscheinungsbild.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- HEALTH MONITOR SECTION -->
+            <div class="section health" id="health">
+                <h2 class="section-title">❤️ Health Monitor</h2>
+                <p style="margin-bottom: 20px; color: #555; font-size: 14px;">
+                    <strong>Alle Technologien wie Sensor für Bewegung, Datenerfassung, Kalorien und Herzfrequenz sind in
+                        Python implementiert:</strong>
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sensor / Funktion</th>
+                            <th>Technologie</th>
+                            <th>Spezifikation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag health">💪 Bewegungserkennung</span></td>
+                            <td>MediaPipe PoseLandmarker</td>
+                            <td>29 Eckpunkte, Lateral Raise / Overhead Press</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag health">❤️ Herzfrequenz</span></td>
+                            <td>RPPG + FFT Analyse</td>
+                            <td>40-210 BPM, Echtzeit-Messung</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag health">💨 Atemmessung</span></td>
+                            <td>Formelbasiert</td>
+                            <td>8-40 Atemzüge/min (0.22*BPM + 3.0)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag health">🔥 Kalorienverbrauch</span></td>
+                            <td>MET Formel</td>
+                            <td>3.5-4.0 mit HR-Koeffizient</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag health">✋ Gestenerkennung</span></td>
+                            <td>HandLandmarker</td>
+                            <td>21 Handpunkte, 1-5 Finger Kontrolle</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SYSTEM ARCHITECTURE -->
+            <h2 class="section-title" id="architecture">🔄 Systemarchitektur</h2>
+            <div class="diagram">
+                📷 Webcam / Kamera
+                ↓
+                🐍 Python Backend (FastAPI Server)
+                ├─ OpenCV: Videoaufnahme (640x480 @ 30 FPS)
+                ├─ MediaPipe: Skelett + Hand-Tracking
+                ├─ NumPy FFT: BPM-Analyse
+                ├─ Kalorie-Engine: MET-Berechnung
+                └─ WebSocket Server
+                ↓
+                🌐 Frontend & 🖥️ Desktop (PyQt5)
+                ├─ HTML5/CSS/JS: Web-Interface
+                ├─ Canvas: Video & Skelett-Rendering
+                └─ Live-Grafiken & Leaderboard
+                ↓
+                💾 JSON Records Database
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SPECIFICATIONS -->
+            <h2 class="section-title" id="specifications">📊 Technische Spezifikationen</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kategorie</th>
+                        <th>Parameter</th>
+                        <th>Wert</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Performance</strong></td>
+                        <td>Video Frame Rate</td>
+                        <td>30 FPS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance</strong></td>
+                        <td>Latenz</td>
+                        <td>&lt;100ms</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance</strong></td>
+                        <td>Echtzeit-Verarbeitung</td>
+                        <td>Bidirektional WebSocket</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Video Processing</strong></td>
+                        <td>Auflösung</td>
+                        <td>640x480 Pixel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Video Processing</strong></td>
+                        <td>JPEG Kompression</td>
+                        <td>60%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Video Processing</strong></td>
+                        <td>Buffer Size</td>
+                        <td>1 Frame</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Health Sensors</strong></td>
+                        <td>Herzfrequenz Range</td>
+                        <td>40-210 BPM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Health Sensors</strong></td>
+                        <td>Atemfrequenz Range</td>
+                        <td>8-40 Atemzüge/min</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Formats</strong></td>
+                        <td>Recordspeicherung</td>
+                        <td>JSON</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Formats</strong></td>
+                        <td>Videoframes</td>
+                        <td>Base64 JPEG</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Formats</strong></td>
+                        <td>Echtzeit-Protokoll</td>
+                        <td>REST API + WebSocket</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const burgerBtn = document.getElementById('burgerBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        burgerBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
