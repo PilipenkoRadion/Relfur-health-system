@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RELFUR</title>
+    <title>RELFUR - Health System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -12,52 +13,109 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+        :root {
+            --primary: #06b6d4;
+            --primary-dark: #0891b2;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --border: #e5e7eb;
+            --text: #374151;
+            --text-light: #6b7280;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
 
-        /* HEADER */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
         header {
             background: white;
-            padding: 12px 15px;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .logo {
-            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
             font-weight: 800;
-            color: #1abc9c;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 1.75rem;
         }
 
         .burger-btn {
             background: none;
             border: none;
-            font-size: 28px;
             cursor: pointer;
-            color: #333;
-            padding: 5px;
+            color: var(--dark);
+            padding: 0.5rem;
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            transition: all 0.3s ease;
         }
 
-        /* SIDEBAR */
+        .burger-btn span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .burger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .burger-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 280px;
             height: 100vh;
             background: white;
+            box-shadow: var(--shadow-lg);
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             z-index: 200;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                transform: translateX(0);
+            }
         }
 
         .sidebar.active {
@@ -65,11 +123,11 @@
         }
 
         .sidebar-header {
-            background: #1abc9c;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 20px;
+            padding: 1.5rem;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 1.1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -79,34 +137,58 @@
             background: none;
             border: none;
             color: white;
-            font-size: 28px;
+            font-size: 1.5rem;
             cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 10px 0;
+            padding: 1rem 0;
+            flex: 1;
         }
 
         .sidebar-item {
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid var(--border);
         }
 
         .sidebar-link {
-            display: block;
-            padding: 15px 20px;
-            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: var(--text);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
-        .sidebar-link:active {
-            background: #f5f5f5;
+        .sidebar-link:hover {
+            background: var(--light);
+            color: var(--primary);
+            padding-left: 1.75rem;
         }
 
-        /* OVERLAY */
+        .sidebar-link i {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
         .overlay {
             position: fixed;
             top: 0;
@@ -125,462 +207,1075 @@
             pointer-events: all;
         }
 
-        /* MAIN CONTENT */
         main {
-            padding: 40px 20px;
+            padding: 2rem 1.5rem;
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
-            padding: 40px;
-            border-radius: 0;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
         }
 
         h1 {
             text-align: center;
-            color: #333;
-            font-size: 32px;
-            margin-bottom: 10px;
-            font-weight: 700;
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 i {
+            font-size: 2.5rem;
         }
 
         .subtitle {
             text-align: center;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 40px;
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* === MOBILE FIX: Table wrapper for horizontal scroll === */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 2.5rem;
+            border-radius: 8px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 40px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border-radius: 8px;
+            min-width: 420px;
         }
 
         thead {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
         }
 
         th {
-            padding: 14px;
+            padding: 1rem;
             text-align: left;
             font-weight: 700;
-            font-size: 13px;
-            color: #333;
-            border-bottom: 2px solid #ddd;
-            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+            color: var(--dark);
+            border-bottom: 2px solid var(--primary);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #e5e5e5;
-            font-size: 14px;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
             vertical-align: top;
             line-height: 1.6;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        tbody tr {
+            transition: all 0.2s;
         }
 
         tbody tr:hover {
-            background-color: #f8f9fa;
+            background-color: var(--light);
+            transform: translateX(4px);
         }
 
         td:first-child {
             font-weight: 700;
-            color: #000;
-            min-width: 120px;
+            color: var(--primary);
+            min-width: 110px;
         }
 
         .tag {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 3px;
-            font-size: 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 700;
-            margin-right: 6px;
-            margin-bottom: 4px;
-            color: white;
+            margin-right: 0.5rem;
+            margin-bottom: 0.35rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .tag i {
+            font-size: 0.9rem;
         }
 
         .tag.python {
-            background: #1abc9c;
+            background: #3776ab20;
+            color: #1d4ed8;
+            border: 1px solid #2563eb;
+        }
+
+        .tag.fastapi {
+            background: #00000020;
+            color: #374151;
+            border: 1px solid #9ca3af;
+        }
+
+        .tag.mediapipe {
+            background: #0ea5e920;
+            color: #0369a1;
+            border: 1px solid #0284c7;
+        }
+
+        .tag.opencv {
+            background: #5b21b640;
+            color: #5b21b6;
+            border: 1px solid #7c3aed;
         }
 
         .tag.javascript {
-            background: #3498db;
+            background: #f7df1e40;
+            color: #a16207;
+            border: 1px solid #ca8a04;
         }
 
         .tag.html {
-            background: #1abc9c;
+            background: #e34c2640;
+            color: #b91c1c;
+            border: 1px solid #dc2626;
         }
 
         .tag.css {
-            background: #3498db;
+            background: #563d7c40;
+            color: #5b21b6;
+            border: 1px solid #7c3aed;
         }
 
         .tag.health {
-            background: #e74c3c;
+            background: #ef444440;
+            color: #991b1b;
+            border: 1px solid #dc2626;
         }
 
         .section {
-            margin-top: 50px;
+            margin-top: 3rem;
+            scroll-margin-top: 100px;
         }
 
         .section-title {
-            display: inline-block;
-            background: #1abc9c;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 8px 16px;
+            padding: 0.75rem 1.5rem;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 1rem;
             letter-spacing: 0.5px;
-            margin: 0;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .section-title:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-title i {
+            font-size: 1.25rem;
         }
 
         .section.javascript .section-title {
-            background: #3498db;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         }
 
         .section.css .section-title {
-            background: #3498db;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
         }
 
         .section.health .section-title {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         }
 
         .diagram {
-            background: #f8f9fa;
-            border-left: 4px solid #1abc9c;
-            padding: 20px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 0.85rem;
             line-height: 1.8;
-            color: #333;
-            margin: 20px 0;
+            color: #e5e7eb;
+            margin: 1.5rem 0;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .diagram-line {
+            margin: 0.35rem 0;
         }
 
         .divider {
-            border-bottom: 2px solid #e0e0e0;
-            margin: 40px 0;
+            border-bottom: 2px solid var(--border);
+            margin: 3rem 0;
         }
 
-        @media (max-width: 768px) {
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, var(--light) 0%, #ffffff 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-left-color: var(--secondary);
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-card h3 i {
+            font-size: 1.25rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .tech-info {
+            background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .tech-info p {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tech-info i {
+            font-size: 1.25rem;
+            color: var(--primary);
+            width: 24px;
+            text-align: center;
+        }
+
+        @media (max-width: 1024px) {
             main {
-                padding: 20px;
+                margin-left: 0;
+            }
+
+            .burger-btn {
+                display: flex;
             }
 
             .container {
-                padding: 20px;
+                padding: 1.5rem;
             }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            main {
+                padding: 1rem;
+                margin-left: 0;
+            }
+
+            .container {
+                padding: 1rem;
+                border-radius: 8px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                gap: 0.5rem;
+            }
+
+            h1 i {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .table-wrapper {
+                margin-bottom: 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            }
+
+            table {
+                font-size: 0.8rem;
+                min-width: 360px;
+            }
+
+            th,
+            td {
+                padding: 0.6rem 0.5rem;
+            }
+
+            th {
+                font-size: 0.7rem;
+            }
+
+            td:first-child {
+                min-width: 90px;
+            }
+
+            .tag {
+                font-size: 0.65rem;
+                padding: 0.25rem 0.6rem;
+                margin-right: 0.35rem;
+            }
+
+            .section-title {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+                gap: 0.5rem;
+            }
+
+            .section-title i {
+                font-size: 1rem;
+            }
+
+            .diagram {
+                font-size: 0.75rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .feature-card {
+                padding: 1rem;
+            }
+
+            .feature-card h3 {
+                font-size: 0.85rem;
+            }
+
+            .feature-card p {
+                font-size: 0.75rem;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .sidebar-header {
+                padding: 1rem 1.25rem;
+                font-size: 1rem;
+            }
+
+            .sidebar-link {
+                padding: 0.85rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .tech-info {
+                padding: 1rem;
+            }
+
+            .tech-info p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 0.75rem;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+                gap: 0.5rem;
+            }
+
+            .logo i {
+                font-size: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.25rem;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            h1 i {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            main {
+                padding: 0.75rem;
+            }
+
+            .container {
+                padding: 0.75rem;
+            }
+
+            .table-wrapper {
+                margin-bottom: 1rem;
+            }
+
+            table {
+                font-size: 0.68rem;
+                min-width: 320px;
+            }
+
+            th,
+            td {
+                padding: 0.4rem 0.3rem;
+            }
+
+            .section-title {
+                font-size: 0.8rem;
+                padding: 0.5rem 0.85rem;
+            }
+
+            .section {
+                margin-top: 2rem;
+            }
+
+            .sidebar-link {
+                padding: 0.75rem 0.85rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: slideInDown 0.5s ease-out;
         }
     </style>
 </head>
 
 <body>
-    <!-- HEADER -->
     <header>
-        <div class="logo">⚡ RELFUR</div>
-        <button class="burger-btn" id="burgerBtn">☰</button>
+        <a href="#" class="logo">
+            <i class="fas fa-heartbeat"></i>
+            <span>RELFUR</span>
+        </a>
+        <button class="burger-btn" id="burgerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            MENU
-            <button class="close-btn" id="closeBtn">✕</button>
+            <i class="fas fa-bars"></i> MENÜ
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <ul class="sidebar-menu">
             <li class="sidebar-item">
-                <a href="#python" class="sidebar-link">🐍 Python</a>
+                <a href="#python" class="sidebar-link">
+                    <i class="fab fa-python"></i>
+                    Python
+                </a>
             </li>
             <li class="sidebar-item">
-                <a href="#javascript" class="sidebar-link">📜 JavaScript</a>
+                <a href="#javascript" class="sidebar-link">
+                    <i class="fab fa-js"></i>
+                    JavaScript
+                </a>
             </li>
             <li class="sidebar-item">
-                <a href="#html" class="sidebar-link">🏗️ HTML5</a>
+                <a href="#html" class="sidebar-link">
+                    <i class="fab fa-html5"></i>
+                    HTML5
+                </a>
             </li>
             <li class="sidebar-item">
-                <a href="#css" class="sidebar-link">🎨 CSS</a>
+                <a href="#css" class="sidebar-link">
+                    <i class="fab fa-css3"></i>
+                    CSS
+                </a>
             </li>
             <li class="sidebar-item">
-                <a href="#health" class="sidebar-link">❤️ Health Monitor</a>
+                <a href="#health" class="sidebar-link">
+                    <i class="fas fa-heart"></i>
+                    Health Monitor
+                </a>
             </li>
             <li class="sidebar-item">
-                <a href="#architecture" class="sidebar-link">🔄 Architektur</a>
+                <a href="#architecture" class="sidebar-link">
+                    <i class="fas fa-sitemap"></i>
+                    Architektur
+                </a>
             </li>
             <li class="sidebar-item">
-                <a href="#specifications" class="sidebar-link">📊 Spezifikationen</a>
+                <a href="#specifications" class="sidebar-link">
+                    <i class="fas fa-cogs"></i>
+                    Spezifikationen
+                </a>
             </li>
         </ul>
     </div>
 
-    
     <div class="overlay" id="overlay"></div>
-
 
     <main>
         <div class="container">
-            <h1>⚡ RELFUR HEALTH SYSTEM</h1>
-            <p class="subtitle">Technologischer Steck & Architektur</p>
+            <h1>
+                <i class="fas fa-heartbeat"></i>
+                RELFUR HEALTH SYSTEM
+            </h1>
+            <p class="subtitle">Technologischer Stack & Architektur</p>
 
             <!-- PYTHON SECTION -->
             <div class="section" id="python">
-                <h2 class="section-title">🐍 Python</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Technologie</th>
-                            <th>Beschreibung</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="tag python">FastAPI</span></td>
-                            <td>Webserver mit Unterstützung von WebSockets.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag python">MediaPipe</span></td>
-                            <td>Bewegungserkennung (Hand-Skelett-Tracking und Gestenerkennung).</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag python">OpenCV (cv2)</span></td>
-                            <td>Videoaufnahme und Bildverarbeitung.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag python">NumPy</span></td>
-                            <td>Mathematische Berechnungen und Matrix-Operationen.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag python">PyQt5</span></td>
-                            <td>Desktop-Anwendung zur Systemüberwachung (Monitoring).</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h2 class="section-title">
+                    <i class="fab fa-python"></i>
+                    Python Backend
+                </h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Technologie</th>
+                                <th>Beschreibung</th>
+                                <th>Funktion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag fastapi"><i class="fas fa-server"></i>FastAPI</span></td>
+                                <td>Webserver mit WebSocket</td>
+                                <td>REST API & Echtzeit-Kommunikation</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag mediapipe"><i class="fas fa-dna"></i>MediaPipe</span></td>
+                                <td>Bewegungserkennung</td>
+                                <td>Hand-Skelett-Tracking & Gestenerkennung</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag opencv"><i class="fas fa-image"></i>OpenCV (cv2)</span></td>
+                                <td>Videoaufnahme</td>
+                                <td>Videoaufnahme & Bildverarbeitung (640x480)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag python"><i class="fas fa-calculator"></i>NumPy</span></td>
+                                <td>Mathematik</td>
+                                <td>Matrix-Operationen & FFT-Analyse</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag python"><i class="fas fa-desktop"></i>PyQt5</span></td>
+                                <td>Desktop App</td>
+                                <td>System-Überwachung & Monitoring</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tech-info">
+                    <p>
+                        <i class="fas fa-microchip"></i>
+                        <strong>Kern-Technologien:</strong> FastAPI für Webserver, MediaPipe für KI-gestützte
+                        Bewegungserkennung, OpenCV für Videoaufnahme
+                    </p>
+                </div>
             </div>
 
             <!-- JAVASCRIPT SECTION -->
             <div class="section javascript" id="javascript">
-                <h2 class="section-title">📜 JavaScript</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Technologie</th>
-                            <th>Beschreibung</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="tag javascript">Vanilla JS</span></td>
-                            <td>Steuerung der Benutzeroberfläche (UI-Logik).</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag javascript">WebSocket API</span></td>
-                            <td>Datenübertragung in Echtzeit.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag javascript">Canvas API</span></td>
-                            <td>Rendering von Videostreams und Hand-Skelett-Modellen.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag javascript">Animationen</span></td>
-                            <td>Flüssige UI-Übergänge.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h2 class="section-title">
+                    <i class="fab fa-js"></i>
+                    JavaScript Frontend
+                </h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Technologie</th>
+                                <th>Beschreibung</th>
+                                <th>Funktion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag javascript"><i class="fas fa-code"></i>Vanilla JS</span></td>
+                                <td>UI-Steuerung</td>
+                                <td>Benutzeroberflächen-Logik & Interaktivität</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag javascript"><i class="fas fa-exchange-alt"></i>WebSocket API</span>
+                                </td>
+                                <td>Echtzeit-Daten</td>
+                                <td>Bidirektionale Datenübertragung</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag javascript"><i class="fas fa-paint-brush"></i>Canvas API</span>
+                                </td>
+                                <td>Grafik-Rendering</td>
+                                <td>Videostreams & Skelett-Modelle anzeigen</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag javascript"><i class="fas fa-sparkles"></i>Animationen</span></td>
+                                <td>UI-Effekte</td>
+                                <td>Flüssige Übergänge & visuelle Effekte</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>
+                            <i class="fas fa-link"></i>
+                            WebSocket Integration
+                        </h3>
+                        <p>Echtzeit-Kommunikation zwischen Frontend und Backend mit bidirektionalen Datenströmen</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>
+                            <i class="fas fa-video"></i>
+                            Canvas Rendering
+                        </h3>
+                        <p>Live-Rendering von Videostreams und Skelett-Modellen auf HTML5 Canvas</p>
+                    </div>
+                </div>
             </div>
 
             <!-- HTML5 SECTION -->
             <div class="section" id="html">
-                <h2 class="section-title">🏗️ HTML5</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Technologie</th>
-                            <th>Beschreibung</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="tag html">Struktur</span></td>
-                            <td>Layout und Markup der Benutzeroberfläche.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag html">Semantische Tags</span></td>
-                            <td>Strukturierte und barrierefreie Organisation des Codes.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h2 class="section-title">
+                    <i class="fab fa-html5"></i>
+                    HTML5 Struktur
+                </h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Element</th>
+                                <th>Beschreibung</th>
+                                <th>Zweck</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Semantische Tags</strong></td>
+                                <td>header, main, section, nav</td>
+                                <td>Strukturierte & barrierefreie Markup</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Canvas Element</strong></td>
+                                <td>&lt;canvas&gt;</td>
+                                <td>Videostream & Grafik-Rendering</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Form-Eingaben</strong></td>
+                                <td>Input, Button, Select</td>
+                                <td>Benutzer-Interaktion & Steuerung</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Meta-Tags</strong></td>
+                                <td>Viewport, Charset</td>
+                                <td>Responsive Design & Kodierung</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- CSS SECTION -->
             <div class="section css" id="css">
-                <h2 class="section-title">🎨 CSS</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Technologie</th>
-                            <th>Beschreibung</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="tag css">CSS3</span></td>
-                            <td>Styling und visuelles Design.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag css">Flexbox/Grid</span></td>
-                            <td>Modernes responsives Layout.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag css">Verläufe und Schatten</span></td>
-                            <td>Visuelle Effekte für ein modernes Erscheinungsbild.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h2 class="section-title">
+                    <i class="fab fa-css3"></i>
+                    CSS Styling
+                </h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Technologie</th>
+                                <th>Beschreibung</th>
+                                <th>Implementierung</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag css"><i class="fas fa-square"></i>CSS3</span></td>
+                                <td>Modernes Styling</td>
+                                <td>Farben, Fonts, Layout-Grundlagen</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag css"><i class="fas fa-grip-horizontal"></i>Flexbox</span></td>
+                                <td>Flex-Layout</td>
+                                <td>Flexible & responsive Layouts</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag css"><i class="fas fa-border-all"></i>CSS Grid</span></td>
+                                <td>Grid-Layout</td>
+                                <td>2D-Layouts & Gitter-Struktur</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag css"><i class="fas fa-palette"></i>Verläufe</span></td>
+                                <td>Visuelle Effekte</td>
+                                <td>Linear & Radial Gradients</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag css"><i class="fas fa-lightbulb"></i>Schatten</span></td>
+                                <td>Tiefe & Dimension</td>
+                                <td>Box-shadows für modernen Look</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>
+                            <i class="fas fa-mobile-alt"></i>
+                            Responsive Design
+                        </h3>
+                        <p>Mobile-first Ansatz mit Media Queries für alle Geräte-Größen</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>
+                            <i class="fas fa-star"></i>
+                            Moderne Effekte
+                        </h3>
+                        <p>Übergänge, Animationen und visuelle Effekte für bessere UX</p>
+                    </div>
+                </div>
             </div>
 
             <!-- HEALTH MONITOR SECTION -->
             <div class="section health" id="health">
-                <h2 class="section-title">❤️ Health Monitor</h2>
-                <p style="margin-bottom: 20px; color: #555; font-size: 14px;">
-                    <strong>Alle Technologien wie Sensor für Bewegung, Datenerfassung, Kalorien und Herzfrequenz sind in
-                        Python implementiert:</strong>
+                <h2 class="section-title">
+                    <i class="fas fa-heart"></i>
+                    Health Monitor System
+                </h2>
+                <p style="margin-bottom: 1.5rem; color: var(--text); font-size: 0.95rem;">
+                    <strong>Alle Sensoren und Funktionen sind in Python mit MediaPipe und NumPy implementiert:</strong>
                 </p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Sensor / Funktion</th>
-                            <th>Technologie</th>
-                            <th>Spezifikation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="tag health">💪 Bewegungserkennung</span></td>
-                            <td>MediaPipe PoseLandmarker</td>
-                            <td>29 Eckpunkte, Lateral Raise / Overhead Press</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag health">❤️ Herzfrequenz</span></td>
-                            <td>RPPG + FFT Analyse</td>
-                            <td>40-210 BPM, Echtzeit-Messung</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag health">💨 Atemmessung</span></td>
-                            <td>Formelbasiert</td>
-                            <td>8-40 Atemzüge/min (0.22*BPM + 3.0)</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag health">🔥 Kalorienverbrauch</span></td>
-                            <td>MET Formel</td>
-                            <td>3.5-4.0 mit HR-Koeffizient</td>
-                        </tr>
-                        <tr>
-                            <td><span class="tag health">✋ Gestenerkennung</span></td>
-                            <td>HandLandmarker</td>
-                            <td>21 Handpunkte, 1-5 Finger Kontrolle</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sensor / Funktion</th>
+                                <th>Technologie</th>
+                                <th>Spezifikation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag health"><i class="fas fa-dumbbell"></i>Bewegung</span></td>
+                                <td>MediaPipe PoseLandmarker</td>
+                                <td>29 Eckpunkte, Lateral Raise / Overhead Press</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag health"><i class="fas fa-heart"></i>Herzfrequenz</span></td>
+                                <td>RPPG + FFT Analyse</td>
+                                <td>40-210 BPM, Echtzeit-Messung</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag health"><i class="fas fa-wind"></i>Atemmessung</span></td>
+                                <td>Formelbasiert</td>
+                                <td>8-40 Atemzüge/min (0.22*BPM + 3.0)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag health"><i class="fas fa-fire"></i>Kalorien</span></td>
+                                <td>MET Formel</td>
+                                <td>3.5-4.0 mit HR-Koeffizient</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag health"><i class="fas fa-hand-paper"></i>Gesten</span></td>
+                                <td>HandLandmarker</td>
+                                <td>21 Handpunkte, 1-5 Finger-Kontrolle</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="feature-grid" style="margin-top: 1.5rem;">
+                    <div class="feature-card">
+                        <h3>
+                            <i class="fas fa-heartbeat"></i>
+                            Vitalzeichen
+                        </h3>
+                        <p>
+                            • Herzfrequenz (40-210 BPM)<br>
+                            • Atemfrequenz (8-40/min)<br>
+                            • Kalorienverbrauch (MET)
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>
+                            <i class="fas fa-brain"></i>
+                            KI-Erkennung
+                        </h3>
+                        <p>
+                            • Skelett-Tracking (29 Punkte)<br>
+                            • Hand-Erkennung (21 Punkte)<br>
+                            • Bewegungs-Analyse
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div class="divider"></div>
 
             <!-- SYSTEM ARCHITECTURE -->
-            <h2 class="section-title" id="architecture">🔄 Systemarchitektur</h2>
-            <div class="diagram">
-                📷 Webcam / Kamera
-                ↓
-                🐍 Python Backend (FastAPI Server)
-                ├─ OpenCV: Videoaufnahme (640x480 @ 30 FPS)
-                ├─ MediaPipe: Skelett + Hand-Tracking
-                ├─ NumPy FFT: BPM-Analyse
-                ├─ Kalorie-Engine: MET-Berechnung
-                └─ WebSocket Server
-                ↓
-                🌐 Frontend & 🖥️ Desktop (PyQt5)
-                ├─ HTML5/CSS/JS: Web-Interface
-                ├─ Canvas: Video & Skelett-Rendering
-                └─ Live-Grafiken & Leaderboard
-                ↓
-                💾 JSON Records Database
+            <div class="section" id="architecture">
+                <h2 class="section-title">
+                    <i class="fas fa-sitemap"></i>
+                    Systemarchitektur
+                </h2>
+                <div class="diagram">
+                    <div class="diagram-line"><strong>Input Layer:</strong></div>
+                    <div class="diagram-line">📷 Webcam / Kamera (640x480 @ 30 FPS)</div>
+                    <div class="diagram-line">↓</div>
+                    <div class="diagram-line"><strong>Processing Layer (Python Backend):</strong></div>
+                    <div class="diagram-line">├─ 🎥 OpenCV: Videoaufnahme</div>
+                    <div class="diagram-line">├─ 🧠 MediaPipe: Skelett + Hand-Tracking</div>
+                    <div class="diagram-line">├─ 📊 NumPy FFT: BPM-Analyse (RPPG)</div>
+                    <div class="diagram-line">├─ 🔥 Kalorie-Engine: MET-Berechnung</div>
+                    <div class="diagram-line">├─ ⚡ FastAPI: REST API + WebSocket</div>
+                    <div class="diagram-line">└─ 📁 PyQt5: Desktop Monitoring</div>
+                    <div class="diagram-line">↓</div>
+                    <div class="diagram-line"><strong>Communication Layer:</strong></div>
+                    <div class="diagram-line">🔌 WebSocket (Echtzeit-Daten)</div>
+                    <div class="diagram-line">📡 REST API (Status & Konfiguration)</div>
+                    <div class="diagram-line">↓</div>
+                    <div class="diagram-line"><strong>Output Layer (Frontend):</strong></div>
+                    <div class="diagram-line">🌐 HTML5/CSS/JavaScript Web-Interface</div>
+                    <div class="diagram-line">📺 Canvas: Video & Skelett-Rendering</div>
+                    <div class="diagram-line">📊 Live-Grafiken & Leaderboard</div>
+                    <div class="diagram-line">↓</div>
+                    <div class="diagram-line"><strong>Storage:</strong></div>
+                    <div class="diagram-line">💾 JSON Records Database</div>
+                </div>
+
+                <div class="tech-info">
+                    <p>
+                        <i class="fas fa-exchange-alt"></i>
+                        <strong>Datenfluss:</strong> Kamera → OpenCV/MediaPipe → NumPy Analyse → FastAPI WebSocket →
+                        Frontend Canvas Rendering
+                    </p>
+                </div>
             </div>
 
             <div class="divider"></div>
 
             <!-- SPECIFICATIONS -->
-            <h2 class="section-title" id="specifications">📊 Technische Spezifikationen</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Kategorie</th>
-                        <th>Parameter</th>
-                        <th>Wert</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Performance</strong></td>
-                        <td>Video Frame Rate</td>
-                        <td>30 FPS</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Performance</strong></td>
-                        <td>Latenz</td>
-                        <td>&lt;100ms</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Performance</strong></td>
-                        <td>Echtzeit-Verarbeitung</td>
-                        <td>Bidirektional WebSocket</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Video Processing</strong></td>
-                        <td>Auflösung</td>
-                        <td>640x480 Pixel</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Video Processing</strong></td>
-                        <td>JPEG Kompression</td>
-                        <td>60%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Video Processing</strong></td>
-                        <td>Buffer Size</td>
-                        <td>1 Frame</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Health Sensors</strong></td>
-                        <td>Herzfrequenz Range</td>
-                        <td>40-210 BPM</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Health Sensors</strong></td>
-                        <td>Atemfrequenz Range</td>
-                        <td>8-40 Atemzüge/min</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Data Formats</strong></td>
-                        <td>Recordspeicherung</td>
-                        <td>JSON</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Data Formats</strong></td>
-                        <td>Videoframes</td>
-                        <td>Base64 JPEG</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Data Formats</strong></td>
-                        <td>Echtzeit-Protokoll</td>
-                        <td>REST API + WebSocket</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="section" id="specifications">
+                <h2 class="section-title">
+                    <i class="fas fa-cogs"></i>
+                    Technische Spezifikationen
+                </h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kategorie</th>
+                                <th>Parameter</th>
+                                <th>Wert</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong><i class="fas fa-tachometer-alt"
+                                            style="margin-right: 0.5rem;"></i>Performance</strong></td>
+                                <td>Video Frame Rate</td>
+                                <td>30 FPS</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-tachometer-alt"
+                                            style="margin-right: 0.5rem;"></i>Performance</strong></td>
+                                <td>Latenz</td>
+                                <td>&lt;100ms</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-tachometer-alt"
+                                            style="margin-right: 0.5rem;"></i>Performance</strong></td>
+                                <td>Echtzeit-Verarbeitung</td>
+                                <td>Bidirektional WebSocket</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-video" style="margin-right: 0.5rem;"></i>Video</strong>
+                                </td>
+                                <td>Auflösung</td>
+                                <td>640x480 Pixel</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-video" style="margin-right: 0.5rem;"></i>Video</strong>
+                                </td>
+                                <td>JPEG Kompression</td>
+                                <td>60%</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-video" style="margin-right: 0.5rem;"></i>Video</strong>
+                                </td>
+                                <td>Buffer Size</td>
+                                <td>1 Frame</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-heartbeat"
+                                            style="margin-right: 0.5rem;"></i>Sensoren</strong></td>
+                                <td>Herzfrequenz Range</td>
+                                <td>40-210 BPM</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-heartbeat"
+                                            style="margin-right: 0.5rem;"></i>Sensoren</strong></td>
+                                <td>Atemfrequenz Range</td>
+                                <td>8-40 Atemzüge/min</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-database" style="margin-right: 0.5rem;"></i>Daten</strong>
+                                </td>
+                                <td>Recordspeicherung</td>
+                                <td>JSON Format</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-database" style="margin-right: 0.5rem;"></i>Daten</strong>
+                                </td>
+                                <td>Videoframes</td>
+                                <td>Base64 JPEG</td>
+                            </tr>
+                            <tr>
+                                <td><strong><i class="fas fa-database" style="margin-right: 0.5rem;"></i>Daten</strong>
+                                </td>
+                                <td>Echtzeit-Protokoll</td>
+                                <td>REST API + WebSocket</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 class="section-title" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="fas fa-star"></i>
+                Kernfunktionen
+            </h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>
+                        <i class="fas fa-video"></i>
+                        Live-Videostreaming
+                    </h3>
+                    <p>Echtzeitverarbeitung von Webcam-Video mit KI-gestütztem Tracking und Skelett-Erkennung</p>
+                </div>
+                <div class="feature-card">
+                    <h3>
+                        <i class="fas fa-heartbeat"></i>
+                        Vitalzeichen-Messung
+                    </h3>
+                    <p>Automatische Erfassung von Herzfrequenz, Atemfrequenz und Kalorienverbrauch</p>
+                </div>
+                <div class="feature-card">
+                    <h3>
+                        <i class="fas fa-chart-line"></i>
+                        Daten-Visualisierung
+                    </h3>
+                    <p>Live-Graphen und Echtzeit-Dashboard mit historischen Daten</p>
+                </div>
+                <div class="feature-card">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        KI-Bewegungserkennung
+                    </h3>
+                    <p>Skelett-Tracking und Gestenerkennung mit MediaPipe für präzise Bewegungsanalyse</p>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -591,24 +1286,38 @@
         const overlay = document.getElementById('overlay');
 
         burgerBtn.addEventListener('click', () => {
+            burgerBtn.classList.add('active');
             sidebar.classList.add('active');
             overlay.classList.add('active');
         });
 
         closeBtn.addEventListener('click', () => {
+            burgerBtn.classList.remove('active');
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
         });
 
         overlay.addEventListener('click', () => {
+            burgerBtn.classList.remove('active');
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
         });
 
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.addEventListener('click', () => {
+                burgerBtn.classList.remove('active');
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
+            });
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
     </script>
